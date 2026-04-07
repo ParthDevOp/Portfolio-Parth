@@ -7,10 +7,12 @@ import { Experience } from "@/components/experience"
 import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { CustomCursor } from "@/components/custom-cursor"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function Home() {
   return (
     <>
+      <LoadingScreen />
       <CustomCursor />
       <main className="min-h-screen bg-background overflow-x-hidden">
         <Navbar />

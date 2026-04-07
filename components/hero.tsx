@@ -1,240 +1,336 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState, useRef } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import Image from "next/image"
 
-const NOISE = '{}[]<>/\\|;:.,!@#$%^&*_+-=~?01'
-const rand = () => NOISE[Math.floor(Math.random() * NOISE.length)]
-
-// Suppress hydration warnings caused by browser extensions
-const suppressHydrationWarning = true
-
-// Naruto silhouette ASCII art pattern
-const NARUTO_FACE = [
-  "           HHHHHHHHHHHH           ",
-  "         HHHHHHHHHHHHHHHH         ",
-  "        HHHHHHHHHHHHHHHHHHH       ",
-  "       HHHSSSSSSSSSSSSSSHHH       ",
-  "      HHSSSSSSSSSSSSSSSSSHH       ",
-  "      HSSSSSSSSSSSSSSSSSSSH       ",
-  "      HSSS  EEE    EEE  SSH       ",
-  "      HSSS  EEE    EEE  SSH       ",
-  "      HSSSSSSSSSSSSSSSSSSSH       ",
-  "      HSSS    NNN    SSSSH       ",
-  "      HSSSSSSSSSSSSSSSSSH        ",
-  "      HSSS   MMMMMM   SSH        ",
-  "      HSSSSSSSSSSSSSSSH          ",
-  "       HHSSSSSSSSSSSHHH          ",
-  "        HHHSSSSSSSHHH            ",
-  "          HHHHHHHHH              ",
+const roles = [
+  "Full Stack Developer",
+  "MERN Stack Expert",
+  "Problem Solver",
+  "System Designer",
+  "Code Craftsman",
 ]
 
-const FACE_MAP: Record<string, { ch: string; col: string }> = {
-  'S': { ch: '░', col: '#ffcc80' },
-  'E': { ch: '◉', col: '#00e5c3' },
-  'N': { ch: '△', col: '#cc9966' },
-  'M': { ch: '▬', col: '#ff7766' },
-  'H': { ch: '▓', col: '#ff6600' }, // Naruto's orange hair
-}
-
-interface Cell {
-  x: number
-  y: number
-  ch: string
-  fd: { ch: string; col: string } | null
-  reveal: number
-  nextNoise: number
-}
-
 export function Hero() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [mouse, setMouse] = useState({ x: -9999, y: -9999 })
-  const cellsRef = useRef<Cell[]>([])
-  const frameRef = useRef(0)
-  const animationRef = useRef<number>()
+  const [currentRole, setCurrentRole] = useState(0)
+  const [displayText, setDisplayText] = useState("")
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  })
+  
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+    setMounted(true)
+  }, [])
 
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    const FS = 14
-    const CW = FS * 0.602
-    const CH = FS * 1.7
-    const R = 160
-
-    const resize = () => {
-      canvas.width = canvas.clientWidth
-      canvas.height = canvas.clientHeight
-      buildCells()
-    }
-
-    const buildCells = () => {
-      const cols = Math.ceil(canvas.width / CW) + 2
-      const rows = Math.ceil(canvas.height / CH) + 2
-      const cells: Cell[] = []
-
-      const faceW = NARUTO_FACE[0].length
-      const faceH = NARUTO_FACE.length
-      const fc0 = Math.round((cols - faceW) / 2)
-      const fr0 = Math.round((rows - faceH) / 2)
-
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const x = c * CW
-          const y = r * CH + CH * 0.5
-
-          const fr = r - fr0
-          const fc = c - fc0
-          let fd = null
-
-          if (fr >= 0 && fr < faceH && fc >= 0 && fc < faceW) {
-            const key = NARUTO_FACE[fr][fc]
-            if (FACE_MAP[key]) fd = FACE_MAP[key]
-          }
-
-          cells.push({ x, y, ch: rand(), fd, reveal: 0, nextNoise: Math.random() * 20 })
-        }
-      }
-      cellsRef.current = cells
-    }
-
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
-
-    const draw = () => {
-      frameRef.current++
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.font = `${FS}px 'Geist Mono', Courier, monospace`
-      ctx.textBaseline = 'middle'
-
-      const rect = canvas.getBoundingClientRect()
-      const mx = mouse.x - rect.left
-      const my = mouse.y - rect.top
-
-      cellsRef.current.forEach(cell => {
-        cell.nextNoise--
-        if (cell.nextNoise <= 0) {
-          cell.nextNoise = 6 + Math.random() * 18
-          if (!cell.fd || cell.reveal < 0.4) cell.ch = rand()
-        }
-
-        const dx = cell.x - mx
-        const dy = cell.y - my
-        const dist = Math.sqrt(dx * dx + dy * dy)
-
-        const want = (cell.fd && dist < R) ? Math.pow(1 - dist / R, 0.6) : 0
-        cell.reveal = lerp(cell.reveal, want, 0.14)
-
-        if (cell.fd && cell.reveal > 0.02) {
-          ctx.save()
-          ctx.shadowBlur = 12 * cell.reveal
-          ctx.shadowColor = cell.fd.col
-          ctx.globalAlpha = Math.min(cell.reveal * 1.2, 1)
-          ctx.fillStyle = cell.fd.col
-          ctx.fillText(cell.fd.ch, cell.x, cell.y)
-          ctx.restore()
-
-          if (cell.reveal < 0.7) {
-            ctx.globalAlpha = (1 - cell.reveal) * 0.12
-            ctx.fillStyle = '#0c2a1a'
-            ctx.fillText(cell.ch, cell.x, cell.y)
-            ctx.globalAlpha = 1
-          }
+  // Typing effect
+  useEffect(() => {
+    if (!mounted) return
+    
+    const role = roles[currentRole]
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (displayText.length < role.length) {
+          setDisplayText(role.slice(0, displayText.length + 1))
         } else {
-          const prox = Math.max(0, 1 - dist / (R * 2.5))
-          ctx.globalAlpha = 0.05 + prox * 0.3
-          if (prox > 0.4 && frameRef.current % 3 === 0) cell.ch = rand()
-          ctx.fillStyle = prox > 0.1 ? '#0d3a22' : '#0a1a10'
-          ctx.fillText(cell.ch, cell.x, cell.y)
-          ctx.globalAlpha = 1
+          setTimeout(() => setIsDeleting(true), 2000)
         }
-      })
-
-      animationRef.current = requestAnimationFrame(draw)
-    }
-
-    resize()
-    draw()
-
-    window.addEventListener('resize', resize)
-
-    return () => {
-      window.removeEventListener('resize', resize)
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current)
+      } else {
+        if (displayText.length > 0) {
+          setDisplayText(displayText.slice(0, -1))
+        } else {
+          setIsDeleting(false)
+          setCurrentRole((prev) => (prev + 1) % roles.length)
+        }
       }
-    }
-  }, [mouse])
+    }, isDeleting ? 50 : 100)
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMouse({ x: e.clientX, y: e.clientY })
-  }
+    return () => clearTimeout(timeout)
+  }, [displayText, isDeleting, currentRole, mounted])
 
   return (
     <section 
+      ref={containerRef}
       id="hero" 
-      className="relative w-full h-screen overflow-hidden"
-      onMouseMove={handleMouseMove}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <canvas 
-        ref={canvasRef} 
-        className="block w-full h-full"
-      />
-      
-      {/* Hero Name Overlay */}
-      <div className="absolute bottom-20 left-8 md:left-12 pointer-events-none z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-[clamp(48px,12vw,120px)] font-bold text-transparent glitch leading-none"
-          style={{ 
-            WebkitTextStroke: '1px rgba(0,229,195,0.2)',
-          }}
-        >
-          PARTH
-        </motion.div>
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-[10px] md:text-xs tracking-[0.4em] text-muted-foreground mt-2"
-        >
-          DEVELOPER · BUILDER · PROBLEM SOLVER
-        </motion.div>
+      {/* Animated Background Particles */}
+      <div className="absolute inset-0 overflow-hidden">
+        {mounted && [...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-primary/30"
+            initial={{ 
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000), 
+              y: typeof window !== 'undefined' ? window.innerHeight + 10 : 1000,
+              opacity: 0 
+            }}
+            animate={{ 
+              y: -10,
+              opacity: [0, 1, 1, 0]
+            }}
+            transition={{
+              duration: 8 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+              ease: "linear"
+            }}
+            style={{
+              width: 2 + Math.random() * 4,
+              height: 2 + Math.random() * 4,
+            }}
+          />
+        ))}
       </div>
 
-      {/* Hint */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="absolute bottom-8 w-full text-center text-[10px] tracking-[0.5em] text-muted-foreground/30 pointer-events-none"
-      >
-        MOVE CURSOR TO REVEAL
+      {/* Grid Background */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(168, 85, 247, 0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(168, 85, 247, 0.5) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
+        }}
+      />
+
+      <motion.div style={{ y, opacity }} className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Content */}
+          <div className="order-2 lg:order-1 text-center lg:text-left">
+            {/* Greeting */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-block mb-4"
+            >
+              <span className="text-[10px] md:text-xs tracking-[0.4em] text-primary/80 uppercase font-mono">
+                {"<Hello World />"}
+              </span>
+            </motion.div>
+
+            {/* Name */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4"
+            >
+              <span className="block text-foreground">{"I'm"}</span>
+              <span className="block animate-shimmer">PARTH</span>
+              <span className="block text-foreground">SHAH</span>
+            </motion.h1>
+
+            {/* Typing Role */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="h-8 mb-6"
+            >
+              <span className="text-lg md:text-xl font-mono text-muted-foreground">
+                {displayText}
+                <span className="animate-blink text-primary">|</span>
+              </span>
+            </motion.div>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="text-sm md:text-base text-muted-foreground max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
+            >
+              Building exceptional digital experiences with clean code, 
+              modern technologies, and a passion for problem-solving. 
+              Based in <span className="text-primary">Surat, Gujarat</span>.
+            </motion.p>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1 }}
+              className="flex flex-wrap gap-4 justify-center lg:justify-start"
+            >
+              <a
+                href="#contact"
+                className="group relative px-8 py-4 bg-primary text-primary-foreground font-semibold text-sm tracking-wider rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]"
+              >
+                <span className="relative z-10">GET IN TOUCH</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary via-purple-400 to-primary bg-[length:200%_100%] opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity" />
+              </a>
+              <a
+                href="#projects"
+                className="px-8 py-4 border border-primary/30 text-foreground font-semibold text-sm tracking-wider rounded-sm hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+              >
+                VIEW WORK
+              </a>
+            </motion.div>
+
+            {/* Social Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
+              className="flex gap-8 mt-12 justify-center lg:justify-start"
+            >
+              {[
+                { value: "2+", label: "Projects" },
+                { value: "100+", label: "Problems Solved" },
+                { value: "10+", label: "Technologies" },
+              ].map((stat, i) => (
+                <div key={stat.label} className="text-center">
+                  <div className="text-2xl md:text-3xl font-bold text-primary">{stat.value}</div>
+                  <div className="text-[10px] tracking-wider text-muted-foreground uppercase">{stat.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right Content - Sasuke Image with Sharingan Glow */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="order-1 lg:order-2 relative flex justify-center"
+          >
+            {/* Outer Glow Ring */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] rounded-full bg-gradient-to-r from-purple-600/20 via-pink-500/20 to-purple-600/20 blur-3xl animate-pulse" />
+            </div>
+
+            {/* Sharingan Ring Animation */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg 
+                className="w-[320px] h-[320px] md:w-[420px] md:h-[420px] animate-sharingan"
+                viewBox="0 0 200 200"
+              >
+                <defs>
+                  <linearGradient id="sharinganGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a855f7" stopOpacity="0.8" />
+                    <stop offset="50%" stopColor="#ec4899" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.8" />
+                  </linearGradient>
+                </defs>
+                <circle 
+                  cx="100" 
+                  cy="100" 
+                  r="90" 
+                  fill="none" 
+                  stroke="url(#sharinganGradient)" 
+                  strokeWidth="2"
+                  strokeDasharray="20 10"
+                />
+                <circle 
+                  cx="100" 
+                  cy="100" 
+                  r="80" 
+                  fill="none" 
+                  stroke="url(#sharinganGradient)" 
+                  strokeWidth="1"
+                  strokeDasharray="5 15"
+                  opacity="0.5"
+                />
+                {/* Tomoe patterns */}
+                {[0, 120, 240].map((angle) => (
+                  <g key={angle} transform={`rotate(${angle} 100 100)`}>
+                    <circle cx="100" cy="25" r="8" fill="#a855f7" opacity="0.8" />
+                    <path 
+                      d="M100 25 Q 115 50 100 70" 
+                      fill="none" 
+                      stroke="#a855f7" 
+                      strokeWidth="3"
+                      opacity="0.6"
+                    />
+                  </g>
+                ))}
+              </svg>
+            </div>
+
+            {/* Inner Ring */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[280px] h-[280px] md:w-[380px] md:h-[380px] rounded-full border border-primary/20 animate-pulse-glow" />
+            </div>
+
+            {/* Image Container */}
+            <motion.div
+              className="relative w-[260px] h-[350px] md:w-[320px] md:h-[430px] rounded-2xl overflow-hidden"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Image
+                src="/images/sasuke.jpg"
+                alt="Sasuke Uchiha - Portfolio Hero"
+                fill
+                className="object-cover object-top"
+                priority
+              />
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-background" />
+            </motion.div>
+
+            {/* Floating Text Badge */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.5 }}
+              className="absolute -left-4 md:left-0 bottom-20 bg-card/80 backdrop-blur-md border border-primary/20 px-4 py-2 rounded-sm"
+            >
+              <span className="text-[10px] tracking-wider text-primary font-mono">{"<Developer />"}</span>
+            </motion.div>
+
+            {/* Floating Experience Badge */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 1.7 }}
+              className="absolute -right-4 md:right-0 top-20 bg-card/80 backdrop-blur-md border border-primary/20 px-4 py-2 rounded-sm"
+            >
+              <span className="text-[10px] tracking-wider text-muted-foreground font-mono">BCA Final Year</span>
+            </motion.div>
+          </motion.div>
+        </div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
-        className="absolute bottom-8 right-8 md:right-12"
+        transition={{ duration: 0.8, delay: 2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <a 
           href="#about" 
           className="flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
         >
-          <span className="text-[10px] tracking-widest">SCROLL</span>
+          <span className="text-[10px] tracking-[0.3em] uppercase">Scroll Down</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <svg width="16" height="24" viewBox="0 0 16 24" fill="none" className="stroke-current">
-              <rect x="1" y="1" width="14" height="22" rx="7" strokeWidth="1.5"/>
-              <circle cx="8" cy="8" r="2" fill="currentColor"/>
+            <svg width="20" height="30" viewBox="0 0 20 30" fill="none" className="stroke-current">
+              <rect x="1" y="1" width="18" height="28" rx="9" strokeWidth="2"/>
+              <motion.circle 
+                cx="10" 
+                cy="10" 
+                r="3" 
+                fill="currentColor"
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              />
             </svg>
           </motion.div>
         </a>
