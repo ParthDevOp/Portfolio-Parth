@@ -148,82 +148,66 @@ export function Hero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            {/* Badge with glow */}
+            {/* Clean Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-purple-500/50 bg-purple-500/20 backdrop-blur-md shadow-[0_0_30px_rgba(168,85,247,0.3)]"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-purple-500/30 bg-purple-500/10 backdrop-blur-sm"
             >
-              <motion.span 
-                className="w-2.5 h-2.5 bg-green-400 rounded-full"
-                animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <span className="text-sm font-semibold text-purple-200 tracking-wider">AVAILABLE FOR HIRE</span>
-              <Zap className="w-4 h-4 text-yellow-400" />
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-sm text-purple-200">Available for Work</span>
             </motion.div>
 
-            {/* Code tag */}
-            <div className="space-y-3">
+            {/* Clean Name & Title */}
+            <div className="space-y-4">
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="text-purple-300 font-mono text-base md:text-lg"
+                className="text-purple-400 font-mono text-sm"
               >
-                <span className="text-pink-400">{"<"}</span>
-                <span className="text-purple-400">Hello</span>
-                <span className="text-foreground"> World </span>
-                <span className="text-pink-400">{"/>"}</span>
+                Hello, I&apos;m
               </motion.p>
               
-              {/* Name with MEGA glitch effect */}
               <motion.h1 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight"
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight"
               >
-                <span className="block text-white/90 mb-2">I&apos;m</span>
-                <span className="block bg-gradient-to-r from-purple-400 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-shimmer drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]">
-                  PARTH SHAH
-                </span>
+                <span className="block text-white">Parth Shah</span>
               </motion.h1>
             </div>
 
-            {/* Typing Effect - Enhanced */}
+            {/* Clean Typing Effect */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="h-14 flex items-center justify-center lg:justify-start"
+              className="h-12 flex items-center justify-center lg:justify-start"
             >
-              <span className="text-xl sm:text-2xl md:text-3xl font-mono">
-                <span className="text-purple-400">{"{ "}</span>
-                <span className="text-pink-300 font-bold">{displayText}</span>
+              <span className="text-xl sm:text-2xl md:text-3xl text-purple-300">
+                {displayText}
                 <motion.span 
-                  className="text-purple-500 font-bold"
+                  className="text-purple-400 ml-1"
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
                 >
                   |
                 </motion.span>
-                <span className="text-purple-400">{" }"}</span>
               </span>
             </motion.div>
 
-            {/* Location with icon */}
+            {/* Location */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="flex items-center justify-center lg:justify-start gap-2"
+              className="flex items-center justify-center lg:justify-start gap-2 text-muted-foreground"
             >
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-500/20">
-                <MapPin className="w-4 h-4 text-purple-400" />
-                <span className="text-purple-200 text-sm font-medium">Surat, Gujarat 🇮🇳</span>
-              </div>
+              <MapPin className="w-4 h-4" />
+              <span className="text-sm">Surat, Gujarat, India</span>
             </motion.div>
 
             {/* Stats - Glowing cards */}
@@ -257,159 +241,96 @@ export function Hero() {
               ))}
             </motion.div>
 
-            {/* CTA Buttons - Enhanced */}
+            {/* CTA Buttons - Clean */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4"
             >
               <Link 
                 href="#contact"
-                className="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-bold text-white transition-all duration-300 overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.4)] hover:shadow-[0_0_50px_rgba(168,85,247,0.6)]"
+                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-white transition-colors duration-300"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  <Mail className="w-5 h-5" />
-                  LET&apos;S CONNECT
-                </span>
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: '100%' }}
-                  transition={{ duration: 0.6 }}
-                />
+                Get in Touch
               </Link>
               
               <Link 
                 href="#projects"
-                className="group px-8 py-4 border-2 border-purple-500/50 hover:border-purple-400 rounded-lg font-bold text-purple-300 hover:text-white transition-all duration-300 backdrop-blur-md hover:bg-purple-500/20 relative overflow-hidden"
+                className="px-8 py-3 border border-purple-500/50 hover:border-purple-400 rounded-lg font-semibold text-purple-300 hover:text-white transition-all duration-300 hover:bg-purple-500/10"
               >
-                <span className="relative z-10">VIEW PROJECTS</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/0 via-purple-600/20 to-purple-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                View Work
               </Link>
             </motion.div>
 
-            {/* Social Links - Enhanced */}
+            {/* Social Links - Clean */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9 }}
-              className="flex items-center justify-center lg:justify-start gap-3 pt-6"
+              className="flex items-center justify-center lg:justify-start gap-4"
             >
               {[
-                { icon: Github, href: "https://github.com/ParthDevOp", label: "GitHub", color: "from-purple-500 to-pink-500" },
-                { icon: Linkedin, href: "https://www.linkedin.com/in/parth-shah-861abb316/", label: "LinkedIn", color: "from-blue-500 to-cyan-500" },
-                { icon: Code2, href: "https://leetcode.com/u/parthdevop/", label: "LeetCode", color: "from-orange-500 to-yellow-500" }
+                { icon: Github, href: "https://github.com/ParthDevOp", label: "GitHub" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/parth-shah-861abb316/", label: "LinkedIn" },
+                { icon: Code2, href: "https://leetcode.com/u/parthdevop/", label: "LeetCode" }
               ].map((social, i) => (
                 <motion.a
                   key={i}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.15, rotate: [0, -5, 5, 0] }}
+                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="relative group p-3 rounded-xl border border-purple-500/30 bg-black/30 backdrop-blur-sm hover:bg-black/50 transition-all duration-300"
+                  className="p-3 rounded-lg border border-purple-500/20 bg-black/20 hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300"
                   aria-label={social.label}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${social.color} opacity-0 group-hover:opacity-20 rounded-xl transition-opacity`} />
-                  <social.icon className="w-6 h-6 text-purple-300 group-hover:text-white transition-colors relative z-10" />
+                  <social.icon className="w-5 h-5 text-purple-300 hover:text-purple-200" />
                 </motion.a>
               ))}
             </motion.div>
           </motion.div>
 
-          {/* Right Content - CRAZY 3D Animated Visual */}
+          {/* Right Content - Clean Professional Visual */}
           <motion.div 
-            className="flex-1 flex items-center justify-center lg:order-2"
-            initial={{ opacity: 0, scale: 0.5, rotateY: 90 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 1, delay: 0.3, type: "spring" }}
+            className="flex-1 flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <div className="relative w-72 h-72 sm:w-96 sm:h-96 lg:w-[500px] lg:h-[500px]">
-              {/* Outer rotating ring with gradient */}
-              <motion.div 
-                className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 p-[2px]"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                style={{ background: 'conic-gradient(from 0deg, #a855f7, #ec4899, #8b5cf6, #a855f7)' }}
-              >
-                <div className="w-full h-full rounded-full bg-black/40 backdrop-blur-sm" />
-              </motion.div>
-              
-              {/* Sharingan-style rotating ring */}
-              <motion.div 
-                className="absolute inset-8 rounded-full border-2 border-purple-500/60 shadow-[0_0_40px_rgba(168,85,247,0.6)]"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              />
-              
-              {/* Pulsing inner glow */}
-              <motion.div 
-                className="absolute inset-16 rounded-full bg-gradient-to-br from-purple-600/40 via-pink-500/30 to-purple-600/40 blur-2xl"
-                animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-              
-              {/* Center terminal display */}
-              <div className="absolute inset-20 rounded-2xl bg-gradient-to-br from-black/80 to-purple-900/40 backdrop-blur-md border-2 border-purple-500/40 flex items-center justify-center overflow-hidden shadow-[0_0_60px_rgba(168,85,247,0.4)]">
-                <div className="text-center p-6 relative z-10">
-                  <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  >
-                    <Terminal className="w-16 h-16 mx-auto text-purple-400 mb-4 drop-shadow-[0_0_20px_rgba(168,85,247,0.8)]" />
-                  </motion.div>
-                  <div className="font-mono text-sm text-purple-200 space-y-1.5">
-                    <div><span className="text-pink-400">const</span> <span className="text-purple-300">dev</span> = {"{"}</div>
-                    <div className="pl-4">name: <span className="text-green-400">&quot;Parth&quot;</span>,</div>
-                    <div className="pl-4">stack: <span className="text-green-400">&quot;MERN&quot;</span>,</div>
-                    <div className="pl-4">level: <span className="text-yellow-400">∞</span>,</div>
-                    <div className="pl-4">status: <span className="text-cyan-400 animate-pulse">🚀 coding</span></div>
-                    <div>{"}"}</div>
+            <div className="relative w-full max-w-md">
+              {/* Simple elegant card */}
+              <div className="relative p-8 rounded-2xl bg-black/30 backdrop-blur-md border border-purple-500/20">
+                <div className="space-y-6">
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    {[
+                      { label: "Projects", value: "10+" },
+                      { label: "Tech Stack", value: "15+" },
+                      { label: "Problems", value: "100+" }
+                    ].map((stat, i) => (
+                      <div key={i}>
+                        <div className="text-3xl font-bold text-purple-400">{stat.value}</div>
+                        <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+                  
+                  {/* Tech stack icons */}
+                  <div className="space-y-3">
+                    <p className="text-xs text-purple-300 uppercase tracking-wider">Tech Stack</p>
+                    <div className="flex flex-wrap gap-2">
+                      {['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'Tailwind'].map((tech) => (
+                        <span key={tech} className="px-3 py-1 text-xs rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                
-                {/* Matrix rain effect overlay */}
-                <div className="absolute inset-0 opacity-10">
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute text-purple-500 text-xs font-mono"
-                      style={{ left: `${i * 25}%` }}
-                      animate={{ y: ['-100%', '100%'] }}
-                      transition={{ duration: 3 + i, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
-                    >
-                      {[...Array(10)].map((_, j) => (
-                        <div key={j}>{'01'}</div>
-                      ))}
-                    </motion.div>
-                  ))}
-                </div>
               </div>
-
-              {/* Orbiting energy orbs */}
-              {[0, 60, 120, 180, 240, 300].map((angle, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 shadow-[0_0_20px_rgba(168,85,247,0.8)]"
-                  style={{
-                    top: '50%',
-                    left: '50%',
-                    marginTop: '-12px',
-                    marginLeft: '-12px',
-                  }}
-                  animate={{
-                    rotate: 360,
-                  }}
-                  transition={{
-                    rotate: { duration: 10, repeat: Infinity, ease: "linear", delay: i * 0.3 },
-                  }}
-                  initial={{
-                    x: Math.cos((angle * Math.PI) / 180) * 180,
-                    y: Math.sin((angle * Math.PI) / 180) * 180,
-                  }}
-                />
-              ))}
             </div>
           </motion.div>
         </div>
