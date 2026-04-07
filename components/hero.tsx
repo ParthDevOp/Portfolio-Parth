@@ -6,6 +6,9 @@ import { motion } from "framer-motion"
 const NOISE = '{}[]<>/\\|;:.,!@#$%^&*_+-=~?01'
 const rand = () => NOISE[Math.floor(Math.random() * NOISE.length)]
 
+// Suppress hydration warnings caused by browser extensions
+const suppressHydrationWarning = true
+
 // Naruto silhouette ASCII art pattern
 const NARUTO_FACE = [
   "           HHHHHHHHHHHH           ",
