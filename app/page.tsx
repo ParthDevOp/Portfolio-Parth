@@ -8,13 +8,15 @@ import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { CustomCursor } from "@/components/custom-cursor"
 import { LoadingScreen } from "@/components/loading-screen"
+import { ParticlesBg } from "@/components/particles-bg"
 
 export default function Home() {
   return (
     <>
       <LoadingScreen />
       <CustomCursor />
-      <main className="min-h-screen bg-background overflow-x-hidden">
+      <ParticlesBg />
+      <main className="min-h-screen bg-background overflow-x-hidden relative">
         <Navbar />
         <Hero />
         <About />
