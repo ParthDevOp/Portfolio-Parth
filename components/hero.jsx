@@ -1,17 +1,14 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
-import { Github, Linkedin, Mail, MapPin, ChevronDown, Code2, Terminal, Sparkles, Zap } from "lucide-react"
+import { Github, Linkedin, MapPin, Mail, ExternalLink } from "lucide-react"
 import Link from "next/link"
 
 const roles = [
   "Full Stack Developer",
-  "MERN Stack Ninja 🥷",
-  "Code Sorcerer ✨",
-  "System Architect",
-  "React Specialist",
-  "Problem Solver 🚀",
+  "MERN Stack Developer",
+  "Software Engineer",
+  "Web Developer",
 ]
 
 export function Hero() {
@@ -25,7 +22,6 @@ export function Hero() {
   useEffect(() => {
     setMounted(true)
     
-    // Auto-play video
     if (videoRef.current) {
       videoRef.current.play().catch(() => {})
     }
@@ -58,10 +54,7 @@ export function Hero() {
   if (!mounted) {
     return (
       <section className="min-h-screen flex items-center justify-center bg-black">
-        <div className="relative">
-          <div className="w-20 h-20 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin" />
-          <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-purple-400 animate-pulse" />
-        </div>
+        <div className="w-12 h-12 border-2 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
       </section>
     )
   }
@@ -69,9 +62,9 @@ export function Hero() {
   return (
     <section 
       id="home" 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
     >
-      {/* SASUKE VIDEO BACKGROUND - FULL SCREEN */}
+      {/* Video Background - Very Subtle */}
       <div className="absolute inset-0 w-full h-full">
         <video
           ref={videoRef}
@@ -86,269 +79,135 @@ export function Hero() {
           <source src="/videos/sasuke-hero.mp4" type="video/mp4" />
         </video>
         
-        {/* Layered overlays for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 via-transparent to-pink-900/30" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,black_100%)]" />
+        {/* Dark overlay for professional look */}
+        <div className="absolute inset-0 bg-black/85" />
       </div>
 
-      {/* Animated Lightning Particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {mounted && [...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            initial={{ 
-              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000), 
-              y: typeof window !== 'undefined' ? window.innerHeight + 10 : 1000,
-              opacity: 0,
-              scale: Math.random() * 0.5 + 0.5
-            }}
-            animate={{ 
-              y: -100,
-              opacity: [0, 1, 1, 0],
-              scale: [1, 1.5, 1]
-            }}
-            transition={{
-              duration: 6 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-              ease: "linear"
-            }}
-            style={{
-              width: 3 + Math.random() * 5,
-              height: 3 + Math.random() * 5,
-              background: `radial-gradient(circle, ${
-                Math.random() > 0.5 ? '#a855f7' : '#ec4899'
-              }, transparent)`,
-              boxShadow: `0 0 ${10 + Math.random() * 20}px ${
-                Math.random() > 0.5 ? '#a855f7' : '#ec4899'
-              }`
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Scan line effect */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <motion.div
-          className="absolute left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-purple-500 to-transparent"
-          animate={{ top: ['0%', '100%'] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
-
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="container mx-auto px-6 md:px-12 relative z-10 max-w-6xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
-          {/* Left Content - ENHANCED */}
-          <motion.div 
-            className="flex-1 text-center lg:text-left space-y-6"
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            {/* Clean Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-purple-500/30 bg-purple-500/10 backdrop-blur-sm"
-            >
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-sm text-purple-200">Available for Work</span>
-            </motion.div>
-
-            {/* Clean Name & Title */}
-            <div className="space-y-4">
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-purple-400 font-mono text-sm"
-              >
-                Hello, I&apos;m
-              </motion.p>
-              
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight"
-              >
-                <span className="block text-white">Parth Shah</span>
-              </motion.h1>
+          {/* Left Content - Professional */}
+          <div className="space-y-8">
+            
+            {/* Status Badge - Minimal */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-white/10 bg-white/5">
+              <span className="w-2 h-2 bg-green-500 rounded-full" />
+              <span className="text-sm text-gray-300">Available for Work</span>
             </div>
 
-            {/* Clean Typing Effect */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="h-12 flex items-center justify-center lg:justify-start"
-            >
-              <span className="text-xl sm:text-2xl md:text-3xl text-purple-300">
-                {displayText}
-                <motion.span 
-                  className="text-purple-400 ml-1"
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ duration: 0.8, repeat: Infinity }}
-                >
-                  |
-                </motion.span>
-              </span>
-            </motion.div>
+            {/* Name - Clean Typography */}
+            <div className="space-y-3">
+              <p className="text-gray-400 text-sm uppercase tracking-wider">Hello, I'm</p>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                Parth Shah
+              </h1>
+              
+              {/* Role with Typing */}
+              <div className="flex items-center gap-2 text-2xl sm:text-3xl text-gray-300">
+                <span>{displayText}</span>
+                <span className="w-0.5 h-7 bg-purple-500 animate-pulse" />
+              </div>
+            </div>
 
             {/* Location */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="flex items-center justify-center lg:justify-start gap-2 text-muted-foreground"
-            >
+            <div className="flex items-center gap-2 text-gray-400">
               <MapPin className="w-4 h-4" />
-              <span className="text-sm">Surat, Gujarat, India</span>
-            </motion.div>
+              <span>Surat, Gujarat, India</span>
+            </div>
 
-            {/* Stats - Glowing cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="grid grid-cols-3 gap-4 py-6 max-w-lg mx-auto lg:mx-0"
-            >
-              {[
-                { label: "Projects", value: "10+", icon: Code2 },
-                { label: "Tech Stack", value: "15+", icon: Terminal },
-                { label: "Problems", value: "100+", icon: Zap }
-              ].map((stat, i) => (
-                <motion.div 
-                  key={i} 
-                  className="relative group"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-lg blur-xl group-hover:blur-2xl transition-all" />
-                  <div className="relative bg-black/40 backdrop-blur-md border border-purple-500/30 rounded-lg p-4 text-center">
-                    <stat.icon className="w-5 h-5 mx-auto mb-2 text-purple-400" />
-                    <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                      {stat.value}
-                    </div>
-                    <div className="text-[10px] text-purple-300/70 uppercase tracking-widest mt-1">
-                      {stat.label}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
+            {/* Description */}
+            <p className="text-gray-400 leading-relaxed max-w-xl">
+              Specializing in building modern web applications using the MERN stack. 
+              Focused on writing clean, maintainable code and delivering exceptional user experiences.
+            </p>
 
-            {/* CTA Buttons - Clean */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-4"
-            >
+            {/* CTA Buttons - Professional */}
+            <div className="flex flex-wrap gap-4">
               <Link 
                 href="#contact"
-                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-white transition-colors duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors font-medium"
               >
-                Get in Touch
+                <Mail className="w-4 h-4" />
+                Contact Me
               </Link>
               
               <Link 
                 href="#projects"
-                className="px-8 py-3 border border-purple-500/50 hover:border-purple-400 rounded-lg font-semibold text-purple-300 hover:text-white transition-all duration-300 hover:bg-purple-500/10"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-white/20 hover:border-white/40 text-white rounded-md transition-colors font-medium"
               >
-                View Work
+                View Projects
+                <ExternalLink className="w-4 h-4" />
               </Link>
-            </motion.div>
+            </div>
 
-            {/* Social Links - Clean */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="flex items-center justify-center lg:justify-start gap-4"
-            >
+            {/* Social Links - Minimal */}
+            <div className="flex items-center gap-3 pt-4">
+              <a
+                href="https://github.com/ParthDevOp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-400 hover:text-white transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/parth-shah-861abb316/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-400 hover:text-white transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Content - Professional Stats */}
+          <div className="space-y-6">
+            
+            {/* Stats Grid */}
+            <div className="grid grid-cols-3 gap-4">
               {[
-                { icon: Github, href: "https://github.com/ParthDevOp", label: "GitHub" },
-                { icon: Linkedin, href: "https://www.linkedin.com/in/parth-shah-861abb316/", label: "LinkedIn" },
-                { icon: Code2, href: "https://leetcode.com/u/parthdevop/", label: "LeetCode" }
-              ].map((social, i) => (
-                <motion.a
-                  key={i}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 rounded-lg border border-purple-500/20 bg-black/20 hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5 text-purple-300 hover:text-purple-200" />
-                </motion.a>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Right Content - Clean Professional Visual */}
-          <motion.div 
-            className="flex-1 flex items-center justify-center"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <div className="relative w-full max-w-md">
-              {/* Simple elegant card */}
-              <div className="relative p-8 rounded-2xl bg-black/30 backdrop-blur-md border border-purple-500/20">
-                <div className="space-y-6">
-                  {/* Stats */}
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    {[
-                      { label: "Projects", value: "10+" },
-                      { label: "Tech Stack", value: "15+" },
-                      { label: "Problems", value: "100+" }
-                    ].map((stat, i) => (
-                      <div key={i}>
-                        <div className="text-3xl font-bold text-purple-400">{stat.value}</div>
-                        <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-                  
-                  {/* Tech stack icons */}
-                  <div className="space-y-3">
-                    <p className="text-xs text-purple-300 uppercase tracking-wider">Tech Stack</p>
-                    <div className="flex flex-wrap gap-2">
-                      {['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'Tailwind'].map((tech) => (
-                        <span key={tech} className="px-3 py-1 text-xs rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                { label: "Projects", value: "10+" },
+                { label: "Technologies", value: "15+" },
+                { label: "Problems Solved", value: "100+" }
+              ].map((stat) => (
+                <div key={stat.label} className="p-4 rounded-lg border border-white/10 bg-white/5">
+                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider">{stat.label}</div>
                 </div>
+              ))}
+            </div>
+
+            {/* Tech Stack */}
+            <div className="p-6 rounded-lg border border-white/10 bg-white/5">
+              <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">Tech Stack</h3>
+              <div className="flex flex-wrap gap-2">
+                {['React', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'Tailwind CSS', 'JavaScript', 'Python'].map((tech) => (
+                  <span key={tech} className="px-3 py-1.5 text-sm rounded-md bg-white/10 text-gray-300 border border-white/10">
+                    {tech}
+                  </span>
+                ))}
               </div>
             </div>
-          </motion.div>
+
+            {/* Education */}
+            <div className="p-6 rounded-lg border border-white/10 bg-white/5">
+              <h3 className="text-sm font-semibold text-white mb-2 uppercase tracking-wider">Education</h3>
+              <p className="text-gray-300 font-medium">Bachelor of Computer Applications</p>
+              <p className="text-sm text-gray-400 mt-1">Final Year • Surat, Gujarat</p>
+            </div>
+          </div>
+
         </div>
 
-        {/* Scroll indicator - Enhanced */}
-        <motion.div 
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 12, 0] }}
-          transition={{ delay: 1.5, y: { duration: 1.8, repeat: Infinity } }}
-        >
-          <Link href="#about" className="flex flex-col items-center gap-3 text-purple-300 hover:text-purple-100 transition-colors group">
-            <span className="text-xs font-mono tracking-[0.3em] uppercase">Scroll Down</span>
-            <div className="p-3 rounded-full border-2 border-purple-500/50 group-hover:border-purple-400 bg-purple-500/10 backdrop-blur-sm transition-all">
-              <ChevronDown className="w-5 h-5" />
-            </div>
-          </Link>
-        </motion.div>
+        {/* Scroll Indicator - Minimal */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <span className="text-xs text-gray-500 uppercase tracking-wider">Scroll</span>
+          <div className="w-px h-12 bg-gradient-to-b from-gray-500 to-transparent" />
+        </div>
       </div>
     </section>
   )
