@@ -170,9 +170,9 @@ export function Hero() {
             {/* Stats Grid */}
             <div className="grid grid-cols-3 gap-4">
               {[
-                { label: "Projects", value: "10+" },
+                { label: "Projects", value: "2" },
                 { label: "Technologies", value: "15+" },
-                { label: "Problems Solved", value: "100+" }
+        
               ].map((stat) => (
                 <div key={stat.label} className="p-4 rounded-lg border border-white/10 bg-white/5">
                   <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
