@@ -154,7 +154,7 @@ export function About() {
                 {[
                   { value: "2+", label: "Projects Built" },
                   { value: "100+", label: "Problems Solved" },
-                  { value: "10+", label: "Technologies" },
+                  { value: "15+", label: "Technologies" },
                 ].map((stat, i) => (
                   <div key={stat.label}>
                     <motion.div
